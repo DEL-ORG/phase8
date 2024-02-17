@@ -1,0 +1,264 @@
+pipeline{
+    agent any
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '7'))
+        //skipDefaultCheckout(true)
+        disableConcurrentBuilds()
+        timeout (time: 60, unit: 'MINUTES')
+        timestamps()
+    }
+    parameters{
+
+    }
+    environments{
+
+    }
+    stages{
+        stage('Login') {
+            environment {
+		       DOCKERHUB_CREDENTIALS=credentials('put jenkins credential id for dockerhub ')
+	        }
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+        stage('test ui') {
+            agent {
+             docker {
+               image 'maven image'
+               args '-u root:root'
+            }    
+        } 
+            steps {
+                sh '''
+            cd REVIVE/src/ui
+            mvn test
+                '''
+            }
+        
+        }
+        stage('test catalog') {
+            agent {
+             docker {
+               image 'golang image'
+               args '-u 0:0'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/catalog 
+            go test
+                '''
+            }
+        
+    }
+        stage('test cart') {
+            agent {
+             docker {
+               image 'maven image'
+               args '-u root:root'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/cart
+            mvn test
+                '''
+            }
+        
+    }
+        stage('test orders') {
+            agent {
+             docker {
+               image 'maven'
+               args '-u root:root'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/orders
+            mvn test
+                '''
+            }
+        
+    }
+    stage('test checkout') {
+            agent {
+             docker {
+               image 'node image'
+               args '-u root:root'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/checkout 
+            npm test
+                '''
+            }
+        
+    }
+    stage('SonarQube analysis') {
+            agent {
+                docker {
+                  image 'sonar scanner image'
+                }
+               }
+               environment {
+        CI = 'true'
+        scannerHome='/opt/sonar-scanner'
+    }
+            steps{
+                withSonarQubeEnv('sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+    stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
+        stage('Build ui') {
+            steps {
+                sh '''
+                cd $WORKSPACE/REVIVE/src/ui
+                docker build -t devopseasylearning/revive-ui:${BUILD_NUMBER} .
+                '''
+            }
+        }
+        stage('Build catalog') {
+            steps {
+                sh '''
+                cd $WORKSPACE/REVIVE/src/catalog
+                docker build -t devopseasylearning/revive-catalog:${BUILD_NUMBER} .
+                '''
+            }
+        }
+        stage('Build cart') {
+            steps {
+                sh '''
+                cd $WORKSPACE/REVIVE/src/cart
+                docker build -t devopseasylearning/revive-cart:${BUILD_NUMBER} .
+                '''
+            }
+        }
+        stage('Build orders') {
+            steps {
+                sh '''
+                cd $WORKSPACE/REVIVE/src/orders
+                docker build -t devopseasylearning/revive-orders:${BUILD_NUMBER} .
+                '''
+            }
+        }
+        stage('Build checkout') {
+            steps {
+                sh '''
+                cd $WORKSPACE/REVIVE/src/checkout
+                docker build -t devopseasylearning/revive-checkout:${BUILD_NUMBER} .
+                '''
+            }
+        }
+        stage('Push ui') {
+            when{ 
+          expression {
+            env.GIT_BRANCH == 'origin/develop' }
+
+            }
+            steps {
+                sh '''
+            docker push devopseasylearning/revive-ui:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('Push catalog') {
+            when{ 
+          expression {
+            env.GIT_BRANCH == 'origin/develop' }
+
+            }
+            steps {
+                sh '''
+            docker push devopseasylearning/revive-catalog:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('Push cart') {
+            when{ 
+          expression {
+            env.GIT_BRANCH == 'origin/develop' }
+
+            }
+            steps {
+                sh '''
+            docker push devopseasylearning/revive-cart:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('Push orders') {
+            when{ 
+          expression {
+            env.GIT_BRANCH == 'origin/develop' }
+
+            }
+            steps {
+                sh '''
+            docker push devopseasylearning/revive-orders:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('Push checkout') {
+            when{ 
+          expression {
+            env.GIT_BRANCH == 'origin/develop' }
+
+            }
+            steps {
+                sh '''
+            docker push devopseasylearning/revive-checkout:${BUILD_NUMBER}
+                '''
+            }
+        }
+    }
+    post {
+        always {
+        success {
+            slackSend color: '#2EB67D',
+            channel: 'channel to be provided', 
+            message: "*Revive Project Build Status*" +
+            "\n Project Name: Revive" +
+            "\n Job Name: ${env.JOB_NAME}" +
+            "\n Build number: ${currentBuild.displayName}" +
+            "\n Build Status : *SUCCESS*" +
+            "\n Build url : ${env.BUILD_URL}"
+        }
+        failure {
+            slackSend color: '#E01E5A',
+            channel: 'channel to be provided',  
+            message: "*Revive Project Build Status*" +
+            "\n Project Name: Revive" +
+            "\n Job Name: ${env.JOB_NAME}" +
+            "\n Build number: ${currentBuild.displayName}" +
+            "\n Build Status : *FAILED*" +
+            "\n Build User : *Tia*" +
+            "\n Action : Please check the console output to fix this job IMMEDIATELY" +
+            "\n Build url : ${env.BUILD_URL}"
+        }
+        unstable {
+            slackSend color: '#ECB22E',
+            channel: 'channel to be provided', 
+            message: "*Revive Project Build Status*" +
+            "\n Project Name: Revive" +
+            "\n Job Name: ${env.JOB_NAME}" +
+            "\n Build number: ${currentBuild.displayName}" +
+            "\n Build Status : *UNSTABLE*" +
+            "\n Action : Please check the console output to fix this job IMMEDIATELY" +
+            "\n Build url : ${env.BUILD_URL}"
+        }   
+    }
+    }
+}
+
+
