@@ -134,6 +134,7 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/catalog
                 docker build -t devopseasylearning/revive-catalog:${BUILD_NUMBER} .
+                docker build -t devopseasylearning/revive-catalog-database:${BUILD_NUMBER} -f Dockerfile-db.
                 '''
             }
         }
@@ -142,6 +143,7 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/cart
                 docker build -t devopseasylearning/revive-cart:${BUILD_NUMBER} .
+                docker build -t devopseasylearning/revive-cart-database:${BUILD_NUMBER} -f Dockerfile-dynamodb .
                 '''
             }
         }
@@ -150,6 +152,8 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/orders
                 docker build -t devopseasylearning/revive-orders:${BUILD_NUMBER} .
+                docker build -t devopseasylearning/revive-orders-database:${BUILD_NUMBER} -f Dockerfile-db.
+                docker build -t devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
                 '''
             }
         }
@@ -158,6 +162,15 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/checkout
                 docker build -t devopseasylearning/revive-checkout:${BUILD_NUMBER} .
+                docker build -t devopseasylearning/revive-checkout-database:${BUILD_NUMBER} -f Dockerfile-db .
+                '''
+            }
+        }
+        stage('Build assets') {
+            steps {
+                sh '''
+                cd $WORKSPACE/REVIVE/src/assets
+                docker build -t devopseasylearning/revive-assets:${BUILD_NUMBER} .
                 '''
             }
         }
@@ -170,6 +183,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-ui:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-ui-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -182,6 +196,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-catalog:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-catalog-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -194,6 +209,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-cart:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-cart-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -206,6 +222,8 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-orders:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-orders-db:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-orders-rabbitmq:${BUILD_NUMBER}
                 '''
             }
         }
@@ -218,6 +236,19 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-checkout:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-checkout-db:${BUILD_NUMBER}
+                '''
+            }
+        }
+        stage('Push assets') {
+            when{ 
+          expression {
+            env.GIT_BRANCH == 'origin/develop' }
+
+            }
+            steps {
+                sh '''
+            docker push devopseasylearning/revive-assets:${BUILD_NUMBER}
                 '''
             }
         }
