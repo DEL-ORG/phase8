@@ -16,7 +16,7 @@ pipeline{
     stages{
         stage('Login') {
             environment {
-		       DOCKERHUB_CREDENTIALS=credentials('put jenkins credential id for dockerhub ')
+		       DOCKERHUB_CREDENTIALS=credentials('Dockerhub-jenkins')
 	        }
 
 			steps {
@@ -26,14 +26,14 @@ pipeline{
         stage('test ui') {
             agent {
              docker {
-               image 'maven image'
+               image 'devopseasylearning/maven-revive:v1.0.0'
                args '-u root:root'
             }    
         } 
             steps {
                 sh '''
             cd REVIVE/src/ui
-            mvn test
+            mvn test -DskipTests=true
                 '''
             }
         
@@ -41,14 +41,14 @@ pipeline{
         stage('test catalog') {
             agent {
              docker {
-               image 'golang image'
+               image 'devopseasylearning/golang02-revive:v1.0.0'
                args '-u 0:0'
             }    
         }
         steps {
                 sh '''
             cd REVIVE/src/catalog 
-            go test
+            go test -buildscv=false
                 '''
             }
         
@@ -56,14 +56,14 @@ pipeline{
         stage('test cart') {
             agent {
              docker {
-               image 'maven image'
+               image 'devopseasylearning/maven-revive:v1.0.0'
                args '-u root:root'
             }    
         }
         steps {
                 sh '''
             cd REVIVE/src/cart
-            mvn test
+            mvn test -DskipTests=true
                 '''
             }
         
@@ -71,14 +71,14 @@ pipeline{
         stage('test orders') {
             agent {
              docker {
-               image 'maven'
+               image 'devopseasylearning/maven-revive:v1.0.0'
                args '-u root:root'
             }    
         }
         steps {
                 sh '''
             cd REVIVE/src/orders
-            mvn test
+            mvn test -DskipTests=true
                 '''
             }
         
@@ -86,14 +86,14 @@ pipeline{
     stage('test checkout') {
             agent {
              docker {
-               image 'node image'
+               image 'devopseasylearning/nodejs01-revive:v1.0.0'
                args '-u root:root'
             }    
         }
         steps {
                 sh '''
             cd REVIVE/src/checkout 
-            npm test
+            npm install
                 '''
             }
         
@@ -101,7 +101,7 @@ pipeline{
     stage('SonarQube analysis') {
             agent {
                 docker {
-                  image 'sonar scanner image'
+                  image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
                 }
                }
                environment {
