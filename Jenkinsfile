@@ -153,7 +153,7 @@ pipeline{
                 cd $WORKSPACE/REVIVE/src/orders
                 docker build -t devopseasylearning/revive-orders:${BUILD_NUMBER} .
                 docker build -t devopseasylearning/revive-orders-database:${BUILD_NUMBER} -f Dockerfile-db .
-                docker build -t devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
+                
                 '''
             }
         }
@@ -171,6 +171,7 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/assets
                 docker build -t devopseasylearning/revive-assets:${BUILD_NUMBER} .
+                docker build -t devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
                 '''
             }
         }
