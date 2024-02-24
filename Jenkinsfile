@@ -134,7 +134,7 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/catalog
                 docker build -t devopseasylearning/revive-catalog:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-catalog-database:${BUILD_NUMBER} -f Dockerfile-db.
+                docker build -t devopseasylearning/revive-catalog-database:${BUILD_NUMBER} -f Dockerfile-db .
                 '''
             }
         }
@@ -152,7 +152,7 @@ pipeline{
                 sh '''
                 cd $WORKSPACE/REVIVE/src/orders
                 docker build -t devopseasylearning/revive-orders:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-orders-database:${BUILD_NUMBER} -f Dockerfile-db.
+                docker build -t devopseasylearning/revive-orders-database:${BUILD_NUMBER} -f Dockerfile-db .
                 docker build -t devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
                 '''
             }
