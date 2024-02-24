@@ -184,7 +184,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-ui:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-ui-db:${BUILD_NUMBER}
+        
                 '''
             }
         }
@@ -250,6 +250,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-assets:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER}
                 '''
             }
         }
