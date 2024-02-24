@@ -197,7 +197,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-catalog:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-catalog-db:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-catalog-database:${BUILD_NUMBER}
                 '''
             }
         }
@@ -210,7 +210,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-cart:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-cart-db:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-cart-database:${BUILD_NUMBER}
                 '''
             }
         }
@@ -223,7 +223,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-orders:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-orders-db:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-orders-database:${BUILD_NUMBER}
             docker push devopseasylearning/revive-orders-rabbitmq:${BUILD_NUMBER}
                 '''
             }
@@ -237,7 +237,7 @@ pipeline{
             steps {
                 sh '''
             docker push devopseasylearning/revive-checkout:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-checkout-db:${BUILD_NUMBER}
+            docker push devopseasylearning/revive-checkout-database:${BUILD_NUMBER}
                 '''
             }
         }
