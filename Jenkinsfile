@@ -277,17 +277,17 @@ pipeline{
             "\n Action : Please check the console output to fix this job IMMEDIATELY" +
             "\n Build url : ${env.BUILD_URL}"
         }
-        unstable {
-            slackSend color: '#ECB22E',
-            channel: 'channel to be provided', 
-            message: "*Revive Project Build Status*" +
-            "\n Project Name: Revive" +
-            "\n Job Name: ${env.JOB_NAME}" +
-            "\n Build number: ${currentBuild.displayName}" +
-            "\n Build Status : *UNSTABLE*" +
-            "\n Action : Please check the console output to fix this job IMMEDIATELY" +
-            "\n Build url : ${env.BUILD_URL}"
-        }   
+        //unstable {
+          //  slackSend color: '#ECB22E',
+          //  channel: 'channel to be provided', 
+          //  message: "*Revive Project Build Status*" +
+          //  "\n Project Name: Revive" +
+          //  "\n Job Name: ${env.JOB_NAME}" +
+          //  "\n Build number: ${currentBuild.displayName}" +
+          //  "\n Build Status : *UNSTABLE*" +
+          //  "\n Action : Please check the console output to fix this job IMMEDIATELY" +
+          //  "\n Build url : ${env.BUILD_URL}"
+        //}  
     }
     }
 }
