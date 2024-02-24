@@ -224,7 +224,7 @@ pipeline{
                 sh '''
             docker push devopseasylearning/revive-orders:${BUILD_NUMBER}
             docker push devopseasylearning/revive-orders-database:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-orders-rabbitmq:${BUILD_NUMBER}
+            
                 '''
             }
         }
