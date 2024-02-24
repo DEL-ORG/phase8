@@ -7,12 +7,12 @@ pipeline{
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
     }
-    parameters{
+    //parameters{
 
-    }
-    environments{
+   // }
+    //environments{
 
-    }
+   // }
     stages{
         stage('Login') {
             environment {
