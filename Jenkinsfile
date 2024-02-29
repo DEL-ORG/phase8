@@ -6,6 +6,9 @@ pipeline{
         disableConcurrentBuilds()
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
+    environment {
+        AWS_Cred = 'your-credentials-id'
+    }
     }
     //parameters{
 
@@ -184,7 +187,7 @@ pipeline{
                  withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                            credentialsId: AWS_Cred,
+                            credentialsId: env.AWS_Cred,
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                         ]])                      {   
                     sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}'
