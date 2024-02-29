@@ -334,7 +334,7 @@ pipeline{
         //}  
     }
     }
-}
+
 def aws_credentials() {
 sh """    
 sudo rm -rf $HOME/.aws || true
