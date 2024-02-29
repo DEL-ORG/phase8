@@ -195,7 +195,9 @@ pipeline{
                     sh 'aws configure set default.output json'
                 }
             }
-        
+            }
+        }
+            
 //        stage('Login') {
 //            steps {
 //              script {
