@@ -202,21 +202,20 @@ pipeline{
             }
             }
         }
-            
-//        stage('Login') {
-//            steps {
-//              script {
-//        withCredentials([[
-//                            $class: 'AmazonWebServicesCredentialsBinding',
-//                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-//                            credentialsId: AWS-Cred,
-//                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-//                        ]])                      {
-//            aws_credentials()               
-//		}
-//        }
-//        }
-//        }
+        stage('Login ECR') {
+    environment {
+        AWSECR_CREDENTIALS = credentials('aws_ecr')
+    }
+    steps {
+        script {
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: env.AWSECR_CREDENTIALS]]) {
+                def ecrCredentials = aws ecr get-login-password --region us-east-1
+                sh "echo '$ecrCredentials' | docker login --username AWS --password-stdin 637423375996.dkr.ecr.us-east-1.amazonaws.com"
+            }
+        }
+    }
+}
+
 
 //        stage('Push ui') {
 //            when{ 
