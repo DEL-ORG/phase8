@@ -176,21 +176,40 @@ pipeline{
 //          }
 //   }
 //    
-//        
-        stage('Login') {
+//    
+   
+        stage('Configure AWS CLI') {
             steps {
-              script {
-        withCredentials([[
+                script {
+                 withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                             credentialsId: AWS-Cred,
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                        ]])                      {
-            aws_credentials()               
-		}
-        }
-        }
-        }
+                        ]])                      {   
+                    sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}'
+                    sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
+                    sh 'aws configure set default.region "us-east-1"'
+                    
+                    // Optionally, you can set other configurations such as output format
+                    sh 'aws configure set default.output json'
+                }
+            }
+        
+//        stage('Login') {
+//            steps {
+//              script {
+//        withCredentials([[
+//                            $class: 'AmazonWebServicesCredentialsBinding',
+//                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+//                            credentialsId: AWS-Cred,
+//                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+//                        ]])                      {
+//            aws_credentials()               
+//		}
+//        }
+//        }
+//        }
 
         stage('Push ui') {
             when{ 
