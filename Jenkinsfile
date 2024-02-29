@@ -175,8 +175,8 @@ pipeline{
    //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
    //             '''
    //         }
-   //     }
-    stages{
+     //   }
+    
         stage('Login') {
             script{
         withCredentials([[
