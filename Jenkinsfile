@@ -1,14 +1,15 @@
 pipeline{
     agent any
+    environment {
+        AWS_Cred = 'AWS_Cred'
+    }
     options {
         buildDiscarder(logRotator(numToKeepStr: '7'))
         //skipDefaultCheckout(true)
         disableConcurrentBuilds()
         timeout (time: 60, unit: 'MINUTES')
         timestamps()
-    environment {
-        AWS_Cred = 'your-credentials-id'
-    }
+     
     }
     //parameters{
 
