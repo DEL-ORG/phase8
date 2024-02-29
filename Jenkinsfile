@@ -197,6 +197,7 @@ pipeline{
                     
                     // Optionally, you can set other configurations such as output format
                     sh 'aws configure set default.output json'
+                    sh "aws s3 ls"
                 }
             }
             }
@@ -217,88 +218,88 @@ pipeline{
 //        }
 //        }
 
-        stage('Push ui') {
-            when{ 
-          expression {
-            env.GIT_BRANCH == 'origin/phase8' }
-
-            }
-            steps {
-                sh '''
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER}
-        
-                '''
-            }
-        }
-        stage('Push catalog') {
-            when{ 
-          expression {
-            env.GIT_BRANCH == 'origin/phase8' }
-
-            }
-            steps {
-                sh '''
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER}
-                '''
-            }
-        }
-        stage('Push cart') {
-            when{ 
-          expression {
-            env.GIT_BRANCH == 'origin/phase8' }
-
-            }
-            steps {
-                sh '''
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER}
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER}
-                '''
-            }
-        }
-        stage('Push orders') {
-            when{ 
-          expression {
-            env.GIT_BRANCH == 'origin/phase8' }
-
-            }
-            steps {
-                sh '''
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER}
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER}
-            
-                '''
-            }
-        }
-        stage('Push checkout') {
-            when{ 
-          expression {
-            env.GIT_BRANCH == 'origin/phase8' }
-
-            }
-            steps {
-                sh '''
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER}
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER}
-                '''
-            }
-        }
-        stage('Push assets') {
-            when{ 
-          expression {
-            env.GIT_BRANCH == 'origin/phase8' }
-
-            }
-            steps {
-                sh '''
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER}
-            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER}
-                '''
-            }
-        }
+//        stage('Push ui') {
+//            when{ 
+//          expression {
+//            env.GIT_BRANCH == 'origin/phase8' }
+//
+//            }
+//            steps {
+//                sh '''
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER}
+//        
+//                '''
+//            }
+//        }
+//        stage('Push catalog') {
+//            when{ 
+//          expression {
+//            env.GIT_BRANCH == 'origin/phase8' }
+//
+//            }
+//            steps {
+//                sh '''
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER}
+//                '''
+//            }
+//        }
+//        stage('Push cart') {
+//            when{ 
+//          expression {
+//            env.GIT_BRANCH == 'origin/phase8' }
+//
+//            }
+//            steps {
+//                sh '''
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER}
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER}
+//                '''
+//            }
+//        }
+//        stage('Push orders') {
+//            when{ 
+//          expression {
+//            env.GIT_BRANCH == 'origin/phase8' }
+//
+//            }
+//            steps {
+//                sh '''
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER}
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER}
+//            
+//                '''
+//            }
+//        }
+//        stage('Push checkout') {
+//            when{ 
+//          expression {
+//            env.GIT_BRANCH == 'origin/phase8' }
+//
+//            }
+//            steps {
+//                sh '''
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER}
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER}
+//                '''
+//            }
+//        }
+//        stage('Push assets') {
+//            when{ 
+//          expression {
+//            env.GIT_BRANCH == 'origin/phase8' }
+//
+//            }
+//            steps {
+//                sh '''
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER}
+//            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER}
+//                '''
+//            }
+//        }
     }
     post {
-        always {
+       always {
         success {
             slackSend color: '#2EB67D',
             channel: 'channel to be provided', 
