@@ -203,13 +203,13 @@ pipeline{
             }
         }
         stage('Login ECR') {
-    environment {
-        AWSECR_CREDENTIALS = credentials('aws_ecr')
-    }
+//    environment {
+//        AWSECR_CREDENTIALS = credentials('aws_ecr')
+//    }
     steps {
         script {
-            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: env.AWSECR_CREDENTIALS]]) {
-                def ecrCredentials = aws ecr get-login-password --region us-east-1
+//            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: env.AWSECR_CREDENTIALS]]) {
+//                def ecrCredentials = aws ecr get-login-password --region us-east-1
                 sh "echo '$ecrCredentials' | docker login --username AWS --password-stdin 637423375996.dkr.ecr.us-east-1.amazonaws.com"
             }
         }
