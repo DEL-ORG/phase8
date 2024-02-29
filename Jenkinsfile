@@ -178,15 +178,19 @@ pipeline{
      //   }
     
         stage('Login') {
-            script{
+            steps {
+              script {
         withCredentials([[
                             $class: 'AmazonWebServicesCredentialsBinding',
                             accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                             credentialsId: AWS-Cred,
                             secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                         ]])
+                        {
             aws_credentials()               
 		}
+        }
+        }
         }
 
         stage('Push ui') {
