@@ -211,7 +211,7 @@ pipeline{
 }
 
 
-       stage('Push ui') {
+        stage('Push ui') {
            when{ 
          expression {
            env.GIT_BRANCH == 'origin/phase8' }
@@ -223,7 +223,7 @@ pipeline{
                '''
            }
        }
-       stage('Push catalog') {
+        stage('Push catalog') {
            when{ 
          expression {
            env.GIT_BRANCH == 'origin/phase8' }
@@ -235,7 +235,7 @@ pipeline{
                '''
            }
        }
-       stage('Push cart') {
+        stage('Push cart') {
            when{ 
          expression {
            env.GIT_BRANCH == 'origin/phase8' }
@@ -247,7 +247,7 @@ pipeline{
                '''
            }
        }
-       stage('Push orders') {
+        stage('Push orders') {
            when{ 
          expression {
            env.GIT_BRANCH == 'origin/phase8' }
@@ -260,7 +260,7 @@ pipeline{
                '''
            }
        }
-       stage('Push checkout') {
+        stage('Push checkout') {
            when{ 
          expression {
            env.GIT_BRANCH == 'origin/phase8' }
@@ -272,7 +272,7 @@ pipeline{
                '''
            }
        }
-       stage('Push assets') {
+        stage('Push assets') {
            when{ 
          expression {
            env.GIT_BRANCH == 'origin/phase8' }
