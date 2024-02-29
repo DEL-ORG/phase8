@@ -13,168 +13,182 @@ pipeline{
     //environments{
 
    // }
+   //stages{
+   //     stage('Login') {
+   //         environment {
+	//	       DOCKERHUB_CREDENTIALS=credentials('Dockerhub-jenkins')
+	//        }
+//
+	//		steps {
+	//			sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+	//		}
+	//	}
+   // 
+   //     stage('test ui') {
+   //         agent {
+   //          docker {
+   //            image 'devopseasylearning/maven-revive:v1.0.0'
+   //            args '-u root:root'
+   //         }    
+   //     } 
+   //         steps {
+   //             sh '''
+   //         cd REVIVE/src/ui
+   //         mvn test -DskipTests=true
+   //             '''
+   //         }
+   //     
+   //     }
+   //     stage('test catalog') {
+   //         agent {
+   //          docker {
+   //            image 'devopseasylearning/golang02-revive:v1.0.0'
+   //            args '-u 0:0'
+   //         }    
+   //     }
+   //     steps {
+   //             sh '''
+   //         cd REVIVE/src/catalog 
+   //         go test -buildscv=false
+   //             '''
+   //         }
+   //     
+   // }
+   //     stage('test cart') {
+   //         agent {
+   //          docker {
+   //            image 'devopseasylearning/maven-revive:v1.0.0'
+   //            args '-u root:root'
+   //         }    
+   //     }
+   //     steps {
+   //             sh '''
+   //         cd REVIVE/src/cart
+   //         mvn test -DskipTests=true
+   //             '''
+   //         }
+   //     
+   // }
+   //     stage('test orders') {
+   //         agent {
+   //          docker {
+   //            image 'devopseasylearning/maven-revive:v1.0.0'
+   //            args '-u root:root'
+   //         }    
+   //     }
+   //     steps {
+   //             sh '''
+   //         cd REVIVE/src/orders
+   //         mvn test -DskipTests=true
+   //             '''
+   //         }
+   //     
+   // }
+   // stage('test checkout') {
+   //         agent {
+   //          docker {
+   //            image 'devopseasylearning/nodejs01-revive:v1.0.0'
+   //            args '-u root:root'
+   //         }    
+   //     }
+   //     steps {
+   //             sh '''
+   //         cd REVIVE/src/checkout 
+   //         npm install
+   //             '''
+   //         }
+   //     
+   // }
+   // stage('SonarQube analysis') {
+   //         agent {
+   //             docker {
+   //               image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
+   //             }
+   //            }
+   //            environment {
+   //     CI = 'true'
+   //     scannerHome='/opt/sonar-scanner'
+   // }
+   //         steps{
+   //             withSonarQubeEnv('sonar') {
+   //                 sh "${scannerHome}/bin/sonar-scanner"
+   //             }
+   //         }
+   //     }
+   // stage("Quality Gate") {
+   //         steps {
+   //           timeout(time: 1, unit: 'HOURS') {
+   //             waitForQualityGate abortPipeline: true
+   //           }
+   //         }
+   //       }
+   //     stage('Build ui') {
+   //         steps {
+   //             sh '''
+   //             cd $WORKSPACE/REVIVE/src/ui
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER} .
+   //             '''
+   //         }
+   //     }
+   //     stage('Build catalog') {
+   //         steps {
+   //             sh '''
+   //             cd $WORKSPACE/REVIVE/src/catalog
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER} .
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER} -f Dockerfile-db .
+   //             '''
+   //         }
+   //     }
+   //     stage('Build cart') {
+   //         steps {
+   //             sh '''
+   //             cd $WORKSPACE/REVIVE/src/cart
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER} .
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER} -f Dockerfile-dynamodb .
+   //             '''
+   //         }
+   //     }
+   //     stage('Build orders') {
+   //         steps {
+   //             sh '''
+   //             cd $WORKSPACE/REVIVE/src/orders
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER} .
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER} -f Dockerfile-db .
+   //             
+   //             '''
+   //         }
+   //     }
+   //     stage('Build checkout') {
+   //         steps {
+   //             sh '''
+   //             cd $WORKSPACE/REVIVE/src/checkout
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER} .
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER} -f Dockerfile-db .
+   //             '''
+   //         }
+   //     }
+   //     stage('Build assets') {
+   //         steps {
+   //             sh '''
+   //             cd $WORKSPACE/REVIVE/src/assets
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER} .
+   //             docker build -t 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
+   //             '''
+   //         }
+   //     }
     stages{
         stage('Login') {
-            environment {
-		       DOCKERHUB_CREDENTIALS=credentials('Dockerhub-jenkins')
-	        }
-
-			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-			}
+            script{
+        withCredentials([[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                            credentialsId: AWS-Cred,
+                            secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                        ]])
+            aws_credentials()               
 		}
-        stage('test ui') {
-            agent {
-             docker {
-               image 'devopseasylearning/maven-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        } 
-            steps {
-                sh '''
-            cd REVIVE/src/ui
-            mvn test -DskipTests=true
-                '''
-            }
-        
         }
-        stage('test catalog') {
-            agent {
-             docker {
-               image 'devopseasylearning/golang02-revive:v1.0.0'
-               args '-u 0:0'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/catalog 
-            go test -buildscv=false
-                '''
-            }
-        
-    }
-        stage('test cart') {
-            agent {
-             docker {
-               image 'devopseasylearning/maven-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/cart
-            mvn test -DskipTests=true
-                '''
-            }
-        
-    }
-        stage('test orders') {
-            agent {
-             docker {
-               image 'devopseasylearning/maven-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/orders
-            mvn test -DskipTests=true
-                '''
-            }
-        
-    }
-    stage('test checkout') {
-            agent {
-             docker {
-               image 'devopseasylearning/nodejs01-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/checkout 
-            npm install
-                '''
-            }
-        
-    }
-    stage('SonarQube analysis') {
-            agent {
-                docker {
-                  image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
-                }
-               }
-               environment {
-        CI = 'true'
-        scannerHome='/opt/sonar-scanner'
-    }
-            steps{
-                withSonarQubeEnv('sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-    stage("Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
-        stage('Build ui') {
-            steps {
-                sh '''
-                cd $WORKSPACE/REVIVE/src/ui
-                docker build -t devopseasylearning/revive-ui:${BUILD_NUMBER} .
-                '''
-            }
-        }
-        stage('Build catalog') {
-            steps {
-                sh '''
-                cd $WORKSPACE/REVIVE/src/catalog
-                docker build -t devopseasylearning/revive-catalog:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-catalog-database:${BUILD_NUMBER} -f Dockerfile-db .
-                '''
-            }
-        }
-        stage('Build cart') {
-            steps {
-                sh '''
-                cd $WORKSPACE/REVIVE/src/cart
-                docker build -t devopseasylearning/revive-cart:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-cart-database:${BUILD_NUMBER} -f Dockerfile-dynamodb .
-                '''
-            }
-        }
-        stage('Build orders') {
-            steps {
-                sh '''
-                cd $WORKSPACE/REVIVE/src/orders
-                docker build -t devopseasylearning/revive-orders:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-orders-database:${BUILD_NUMBER} -f Dockerfile-db .
-                
-                '''
-            }
-        }
-        stage('Build checkout') {
-            steps {
-                sh '''
-                cd $WORKSPACE/REVIVE/src/checkout
-                docker build -t devopseasylearning/revive-checkout:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-checkout-database:${BUILD_NUMBER} -f Dockerfile-db .
-                '''
-            }
-        }
-        stage('Build assets') {
-            steps {
-                sh '''
-                cd $WORKSPACE/REVIVE/src/assets
-                docker build -t devopseasylearning/revive-assets:${BUILD_NUMBER} .
-                docker build -t devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER} -f Dockerfile-rabbitmq .
-                '''
-            }
-        }
+
         stage('Push ui') {
             when{ 
           expression {
@@ -183,7 +197,7 @@ pipeline{
             }
             steps {
                 sh '''
-            docker push devopseasylearning/revive-ui:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER}
         
                 '''
             }
@@ -196,8 +210,8 @@ pipeline{
             }
             steps {
                 sh '''
-            docker push devopseasylearning/revive-catalog:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-catalog-database:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -209,8 +223,8 @@ pipeline{
             }
             steps {
                 sh '''
-            docker push devopseasylearning/revive-cart:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-cart-database:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -222,8 +236,8 @@ pipeline{
             }
             steps {
                 sh '''
-            docker push devopseasylearning/revive-orders:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-orders-database:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER}
             
                 '''
             }
@@ -236,8 +250,8 @@ pipeline{
             }
             steps {
                 sh '''
-            docker push devopseasylearning/revive-checkout:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-checkout-database:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -249,8 +263,8 @@ pipeline{
             }
             steps {
                 sh '''
-            docker push devopseasylearning/revive-assets:${BUILD_NUMBER}
-            docker push devopseasylearning/revive-orders-database-rabbitmq:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER}
+            docker push 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER}
                 '''
             }
         }
@@ -293,5 +307,23 @@ pipeline{
     }
     }
 }
+def aws_credentials() {
+sh """    
+sudo rm -rf $HOME/.aws || true
+sudo mkdir -p $HOME/.aws || true
+sudo chown -R jenkins:jenkins $HOME/.aws
 
+cat <<EOF >  $HOME/.aws/credentials
+[default]
+aws_access_key_id = ${AWS_ACCESS_KEY_ID}
+aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
+EOF
+
+cat <<EOF >  $HOME/.aws/config
+[default]
+region = "us-east-1"
+output = json
+EOF
+"""
+}
 
