@@ -13,7 +13,7 @@ pipeline{
     //environments{
 
    // }
-   //stages{
+   stages{
    //     stage('Login') {
    //         environment {
 	//	       DOCKERHUB_CREDENTIALS=credentials('Dockerhub-jenkins')
