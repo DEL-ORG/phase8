@@ -334,7 +334,7 @@ services:
          catalog:
            hostname: catalog
            ports:
-             - "8080:8080"
+             - "8081:8080"
            image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
            restart: always
            environment:
@@ -418,7 +418,7 @@ services:
            hostname: orders-db
            restart: always
            security_opt:
-             - "no-new-privileges: true"
+             - "no-new-privileges=true"
            environment:
              - reschedule=on-node-failure
              - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
