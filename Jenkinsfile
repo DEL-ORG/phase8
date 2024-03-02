@@ -355,7 +355,6 @@ services:
     depends_on:
       - catalog-db
 
-
   catalog-db:
     image: mariadb:10.9
     hostname: catalog-db
@@ -369,7 +368,6 @@ services:
     mem_limit: 128m
     networks:
       - revive
-
 
   carts:
     hostname: carts
@@ -426,7 +424,7 @@ services:
     hostname: orders-db
     restart: always
     security_opt:
-      - no-new-privileges:true
+      - no-new-privileges: true
     environment:
       - reschedule=on-node-failure
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -489,7 +487,8 @@ services:
 
 networks:
   revive:
-    driver: bridge  
+    driver: bridge
+ 
     EOF
     '''
 }
