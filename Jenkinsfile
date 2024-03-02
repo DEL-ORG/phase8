@@ -306,190 +306,178 @@ pipeline{
 cat <<EOF> docker-compose.yml
 version: '2.3'
 services:
-  ui:
-    ports:
-      - 7777:8080
-    environment:
-      - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
-      - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
-      - ENDPOINTS_CATALOG=http://catalog:8080
-      - ENDPOINTS_CARTS=http://carts:8080
-      - ENDPOINTS_ORDERS=http://orders:8080
-      - ENDPOINTS_CHECKOUT=http://checkout:8080
-      - ENDPOINTS_ASSETS=http://assets:8080
-    hostname: ui
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER}
-    restart: always
-    mem_limit: 512m
-    cap_drop:
-      - ALL
-    networks:
-      - revive
-    depends_on:
-      - catalog
-      - carts
-      - orders
-      - checkout
-      - assets
-
-  catalog:
-    hostname: catalog
-    ports:
-      - "8080:8080"
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
-    restart: always
-    environment:
-      - DB_ENDPOINT=catalog-db:3306
-      - DB_NAME=sampledb
-      - DB_USER=catalog_user
-      - GIN_MODE=release
-      - DB_MIGRATE=true
-      - DB_CONNECT_TIMEOUT=5
-      - PORT=8080
-      - DB_PASSWORD=${DB_PASSWORD}
-    mem_limit: 128m
-    cap_drop:
-      - ALL
-    networks:
-      - revive
-    depends_on:
-      - catalog-db
-
-  catalog-db:
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER}
-    hostname: catalog-db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-      - MYSQL_DATABASE=sampledb
-      - MYSQL_USER=catalog_user
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    mem_limit: 128m
-    networks:
-      - revive
-
-  carts:
-    hostname: carts
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER}
-    restart: always
-    environment:
-      - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
-      - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
-      - SPRING_PROFILES_ACTIVE=dynamodb
-      - CARTS_DYNAMODB_ENDPOINT=http://carts-db:8000
-      - CARTS_DYNAMODB_CREATETABLE=true
-      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    mem_limit: 256m
-    cap_drop:
-      - ALL
-    networks:
-      - revive
-    depends_on:
-      - carts-db
-
-  carts-db:
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER}
-    hostname: carts-db
-    restart: always
-    mem_limit: 256m
-    networks:
-      - revive
-
-  orders:
-    hostname: orders
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER}
-    restart: always
-    environment:
-      - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
-      - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
-      - SPRING_PROFILES_ACTIVE=rabbitmq
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://orders-db:5432/orders
-      - SPRING_DATASOURCE_USERNAME=orders_user
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
-      - SPRING_RABBITMQ_HOST=rabbitmq
-    mem_limit: 512m
-    cap_drop:
-      - ALL
-    networks:
-      - revive
-    depends_on:
-      - rabbitmq
-      - orders-db
-      - checkout
-
-  orders-db:
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER}
-    hostname: orders-db
-    restart: always
-    security_opt:
-      - no-new-privileges: true
-    environment:
-      - reschedule=on-node-failure
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=orders
-      - POSTGRES_USER=orders_user
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d orders -U orders_user"]
-      interval: 10s
-      timeout: 5s
-      retries: 30
-    mem_limit: 128m
-    networks:
-      - revive
-
-  checkout:
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER}
-    hostname: checkout
-    restart: always
-    read_only: true
-    tmpfs:
-      - /tmp:rw,noexec,nosuid
-    environment:
-      - REDIS_URL=redis://checkout-redis:6379
-      - ENDPOINTS_ORDERS=http://orders:8080
-    mem_limit: 256m
-    cap_drop:
-      - ALL
-    networks:
-      - revive
-    depends_on:
-      - checkout-redis
-
-  checkout-redis:
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER}
-    hostname: checkout-redis
-    restart: always
-    mem_limit: 128m
-    networks:
-      - revive
-
-  assets:
-    hostname: assets
-    environment:
-      - PORT=8080
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER}
-    restart: always
-    mem_limit: 64m
-    cap_drop:
-      - ALL
-    networks:
-      - revive
-
-  rabbitmq:
-    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER}
-    ports:
-      - "6001:5672"
-      - "15999:15672"
-    networks:
-      - revive
-
+         ui:
+           ports:
+             - 7777:8080
+           environment:
+             - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
+             - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
+             - ENDPOINTS_CATALOG=http://catalog:8080
+             - ENDPOINTS_CARTS=http://carts:8080
+             - ENDPOINTS_ORDERS=http://orders:8080
+             - ENDPOINTS_CHECKOUT=http://checkout:8080
+             - ENDPOINTS_ASSETS=http://assets:8080
+           hostname: ui
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER}
+           restart: always
+           mem_limit: 512m
+           cap_drop:
+             - ALL
+           networks:
+             - revive
+           depends_on:
+             - catalog
+             - carts
+             - orders
+             - checkout
+             - assets
+         catalog:
+           hostname: catalog
+           ports:
+             - "8080:8080"
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
+           restart: always
+           environment:
+             - DB_ENDPOINT=catalog-db:3306
+             - DB_NAME=sampledb
+             - DB_USER=catalog_user
+             - GIN_MODE=release
+             - DB_MIGRATE=true
+             - DB_CONNECT_TIMEOUT=5
+             - PORT=8080
+             - DB_PASSWORD=${DB_PASSWORD}
+           mem_limit: 128m
+           cap_drop:
+             - ALL
+           networks:
+             - revive
+           depends_on:
+             - catalog-db
+         catalog-db:
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER}
+           hostname: catalog-db
+           restart: always
+           environment:
+             - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+             - MYSQL_ALLOW_EMPTY_PASSWORD=true
+             - MYSQL_DATABASE=sampledb
+             - MYSQL_USER=catalog_user
+             - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+           mem_limit: 128m
+           networks:
+             - revive
+         carts:
+           hostname: carts
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER}
+           restart: always
+           environment:
+             - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
+             - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
+             - SPRING_PROFILES_ACTIVE=dynamodb
+             - CARTS_DYNAMODB_ENDPOINT=http://carts-db:8000
+             - CARTS_DYNAMODB_CREATETABLE=true
+             - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+           mem_limit: 256m
+           cap_drop:
+             - ALL
+           networks:
+             - revive
+           depends_on:
+             - carts-db
+         carts-db:
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER}
+           hostname: carts-db
+           restart: always
+           mem_limit: 256m
+           networks:
+             - revive
+         orders:
+           hostname: orders
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER}
+           restart: always
+           environment:
+             - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
+             - SERVER_TOMCAT_ACCESSLOG_ENABLED=true
+             - SPRING_PROFILES_ACTIVE=rabbitmq
+             - SPRING_DATASOURCE_URL=jdbc:postgresql://orders-db:5432/orders
+             - SPRING_DATASOURCE_USERNAME=orders_user
+             - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+             - SPRING_RABBITMQ_HOST=rabbitmq
+           mem_limit: 512m
+           cap_drop:
+             - ALL
+           networks:
+             - revive
+           depends_on:
+             - rabbitmq
+             - orders-db
+             - checkout
+         orders-db:
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER}
+           hostname: orders-db
+           restart: always
+           security_opt:
+             - no-new-privileges: true
+           environment:
+             - reschedule=on-node-failure
+             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+             - POSTGRES_DB=orders
+             - POSTGRES_USER=orders_user
+           healthcheck:
+             test: ["CMD-SHELL", "pg_isready -d orders -U orders_user"]
+             interval: 10s
+             timeout: 5s
+             retries: 30
+           mem_limit: 128m
+           networks:
+             - revive
+         checkout:
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER}
+           hostname: checkout
+           restart: always
+           read_only: true
+           tmpfs:
+             - /tmp:rw,noexec,nosuid
+           environment:
+             - REDIS_URL=redis://checkout-redis:6379
+             - ENDPOINTS_ORDERS=http://orders:8080
+           mem_limit: 256m
+           cap_drop:
+             - ALL
+           networks:
+             - revive
+           depends_on:
+             - checkout-redis
+         checkout-redis:
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER}
+           hostname: checkout-redis
+           restart: always
+           mem_limit: 128m
+           networks:
+             - revive
+         assets:
+           hostname: assets
+           environment:
+             - PORT=8080
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER}
+           restart: always
+           mem_limit: 64m
+           cap_drop:
+             - ALL
+           networks:
+             - revive
+         rabbitmq:
+           image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER}
+           ports:
+             - "6001:5672"
+             - "15999:15672"
+           networks:
+             - revive
 networks:
   revive:
     driver: bridge
- 
-    EOF
+EOF
     '''
 }
 }
