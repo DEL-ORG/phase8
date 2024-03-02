@@ -318,7 +318,7 @@ services:
       - ENDPOINTS_CHECKOUT=http://checkout:8080
       - ENDPOINTS_ASSETS=http://assets:8080
     hostname: ui
-    image: devopseasylearning/revive-ui:01
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/ui:${BUILD_NUMBER}
     restart: always
     mem_limit: 512m
     cap_drop:
@@ -336,7 +336,7 @@ services:
     hostname: catalog
     ports:
       - "8080:8080"
-    image: devopseasylearning/revive-catalog:01
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog:${BUILD_NUMBER}
     restart: always
     environment:
       - DB_ENDPOINT=catalog-db:3306
@@ -356,7 +356,7 @@ services:
       - catalog-db
 
   catalog-db:
-    image: mariadb:10.9
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/catalog-db:${BUILD_NUMBER}
     hostname: catalog-db
     restart: always
     environment:
@@ -371,7 +371,7 @@ services:
 
   carts:
     hostname: carts
-    image: devopseasylearning/revive-cart:01
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts:${BUILD_NUMBER}
     restart: always
     environment:
       - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
@@ -390,7 +390,7 @@ services:
       - carts-db
 
   carts-db:
-    image: amazon/dynamodb-local:1.20.0
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/carts-db:${BUILD_NUMBER}
     hostname: carts-db
     restart: always
     mem_limit: 256m
@@ -399,7 +399,7 @@ services:
 
   orders:
     hostname: orders
-    image: devopseasylearning/revive-orders:01
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders:${BUILD_NUMBER}
     restart: always
     environment:
       - JAVA_OPTS=-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/urandom
@@ -420,7 +420,7 @@ services:
       - checkout
 
   orders-db:
-    image: postgres:16.1
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/orders-db:${BUILD_NUMBER}
     hostname: orders-db
     restart: always
     security_opt:
@@ -440,7 +440,7 @@ services:
       - revive
 
   checkout:
-    image: devopseasylearning/revive-checkout:01
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout:${BUILD_NUMBER}
     hostname: checkout
     restart: always
     read_only: true
@@ -458,7 +458,7 @@ services:
       - checkout-redis
 
   checkout-redis:
-    image: redis:6-alpine
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/checkout-db:${BUILD_NUMBER}
     hostname: checkout-redis
     restart: always
     mem_limit: 128m
@@ -469,7 +469,7 @@ services:
     hostname: assets
     environment:
       - PORT=8080
-    image: prinsoo/revive-app:assets-v1
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset:${BUILD_NUMBER}
     restart: always
     mem_limit: 64m
     cap_drop:
@@ -478,7 +478,7 @@ services:
       - revive
 
   rabbitmq:
-    image: prinsoo/revive-app:rabbitmq-v1
+    image: 637423375996.dkr.ecr.us-east-1.amazonaws.com/asset-db:${BUILD_NUMBER}
     ports:
       - "6001:5672"
       - "15999:15672"
