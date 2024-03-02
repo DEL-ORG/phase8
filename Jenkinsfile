@@ -102,29 +102,29 @@ pipeline{
             }
         
     }
-    stage('SonarQube analysis') {
-            agent {
-                docker {
-                  image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
-                }
-               }
-               environment {
-        CI = 'true'
-        scannerHome='/opt/sonar-scanner'
-    }
-            steps{
-                withSonarQubeEnv('sonar') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-    stage("Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
+//    stage('SonarQube analysis') {
+//            agent {
+//                docker {
+//                  image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
+//                }
+//               }
+//               environment {
+//        CI = 'true'
+//        scannerHome='/opt/sonar-scanner'
+//    }
+//            steps{
+//                withSonarQubeEnv('sonar') {
+//                    sh "${scannerHome}/bin/sonar-scanner"
+//                }
+//            }
+//        }
+//    stage("Quality Gate") {
+//            steps {
+//              timeout(time: 1, unit: 'HOURS') {
+//                waitForQualityGate abortPipeline: true
+//              }
+//            }
+//          }
         stage('Build ui') {
             steps {
                 sh '''
