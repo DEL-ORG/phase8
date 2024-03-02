@@ -303,7 +303,7 @@ pipeline{
 	          ])
               {
                 sh'''
-    cat <<EOF> docker-compose.yml
+cat <<EOF> docker-compose.yml
 version: '2.3'
 services:
   ui:
