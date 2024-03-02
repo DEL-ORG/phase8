@@ -497,7 +497,6 @@ networks:
             }
         }
         
-  }
         stage('deployment') {
            when{ 
          expression {
@@ -513,6 +512,7 @@ networks:
                '''
            }
        }
+}
 }
   post {
      always {
