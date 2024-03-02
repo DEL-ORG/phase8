@@ -296,7 +296,7 @@ pipeline{
 	            string(credentialsId: 'MYSQL_ROOT_PASSWORD', variable: 'MYSQL_ROOT_PASSWORD'),
                 string(credentialsId: 'MYSQL_PASSWORD', variable: 'MYSQL_PASSWORD'),
                 string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD'),
-                string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'),
+                string(credentialsId: 'AWS_ACCESS_KEY', variable: 'AWS_ACCESS_KEY'),
                 string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
                 string(credentialsId: 'SPRING_DATASOURCE_PASSWORD', variable: 'SPRING_DATASOURCE_PASSWORD'),
                 string(credentialsId: 'POSTGRES_PASSWORD', variable: 'POSTGRES_PASSWORD')   
@@ -381,7 +381,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dynamodb
       - CARTS_DYNAMODB_ENDPOINT=http://carts-db:8000
       - CARTS_DYNAMODB_CREATETABLE=true
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     mem_limit: 256m
     cap_drop:
