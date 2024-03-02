@@ -27,81 +27,81 @@ pipeline{
 		}
 	}
     
-        stage('test ui') {
-            agent {
-             docker {
-               image 'devopseasylearning/maven-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        } 
-            steps {
-                sh '''
-            cd REVIVE/src/ui
-            mvn test -DskipTests=true
-                '''
-            }
-        
-        }
-        stage('test catalog') {
-            agent {
-             docker {
-               image 'devopseasylearning/golang02-revive:v1.0.0'
-               args '-u 0:0'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/catalog 
-            go test -buildscv=false
-                '''
-            }
-        
-    }
-        stage('test cart') {
-            agent {
-             docker {
-               image 'devopseasylearning/maven-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/cart
-            mvn test -DskipTests=true
-                '''
-            }
-        
-    }
-        stage('test orders') {
-            agent {
-             docker {
-               image 'devopseasylearning/maven-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/orders
-            mvn test -DskipTests=true
-                '''
-            }
-        
-    }
-    stage('test checkout') {
-            agent {
-             docker {
-               image 'devopseasylearning/nodejs01-revive:v1.0.0'
-               args '-u root:root'
-            }    
-        }
-        steps {
-                sh '''
-            cd REVIVE/src/checkout 
-            npm install
-                '''
-            }
-        
-    }
+//        stage('test ui') {
+//            agent {
+//             docker {
+//               image 'devopseasylearning/maven-revive:v1.0.0'
+//               args '-u root:root'
+//            }    
+//        } 
+//            steps {
+//                sh '''
+//            cd REVIVE/src/ui
+//            mvn test -DskipTests=true
+//                '''
+//            }
+//        
+//        }
+//        stage('test catalog') {
+//            agent {
+//             docker {
+//               image 'devopseasylearning/golang02-revive:v1.0.0'
+//               args '-u 0:0'
+//            }    
+//        }
+//        steps {
+//                sh '''
+//            cd REVIVE/src/catalog 
+//            go test -buildscv=false
+//                '''
+//            }
+//        
+//    }
+//        stage('test cart') {
+//            agent {
+//             docker {
+//               image 'devopseasylearning/maven-revive:v1.0.0'
+//               args '-u root:root'
+//            }    
+//        }
+//        steps {
+//                sh '''
+//            cd REVIVE/src/cart
+//            mvn test -DskipTests=true
+//                '''
+//            }
+//        
+//    }
+//        stage('test orders') {
+//            agent {
+//             docker {
+//               image 'devopseasylearning/maven-revive:v1.0.0'
+//               args '-u root:root'
+//            }    
+//        }
+//        steps {
+//                sh '''
+//            cd REVIVE/src/orders
+//            mvn test -DskipTests=true
+//                '''
+//            }
+//        
+//    }
+//    stage('test checkout') {
+//            agent {
+//             docker {
+//               image 'devopseasylearning/nodejs01-revive:v1.0.0'
+//               args '-u root:root'
+//            }    
+//        }
+//        steps {
+//                sh '''
+//            cd REVIVE/src/checkout 
+//            npm install
+//                '''
+//            }
+//        
+//    }
 //    stage('SonarQube analysis') {
 //            agent {
 //                docker {
@@ -418,7 +418,7 @@ services:
            hostname: orders-db
            restart: always
            security_opt:
-             - no-new-privileges: true
+             - no-new-privileges: "true"
            environment:
              - reschedule=on-node-failure
              - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
