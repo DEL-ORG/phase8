@@ -418,7 +418,7 @@ services:
            hostname: orders-db
            restart: always
            security_opt:
-             - no-new-privileges: "true"
+             - "no-new-privileges: true"
            environment:
              - reschedule=on-node-failure
              - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
