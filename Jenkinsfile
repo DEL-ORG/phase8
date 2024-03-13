@@ -27,105 +27,104 @@ pipeline{
 		}
 	}
     
-//        stage('test ui') {
-//            agent {
-//             docker {
-//               image 'devopseasylearning/maven-revive:v1.0.0'
-//               args '-u root:root'
-//            }    
-//        } 
-//            steps {
-//                sh '''
-//            cd REVIVE/src/ui
-//            mvn test -DskipTests=true
-//                '''
-//            }
-//        
-//        }
-//        stage('test catalog') {
-//            agent {
-//             docker {
-//               image 'devopseasylearning/golang02-revive:v1.0.0'
-//               args '-u 0:0'
-//            }    
-//        }
-//        steps {
-//                sh '''
-//            cd REVIVE/src/catalog 
-//            go test -buildscv=false
-//                '''
-//            }
-//        
-//    }
-//        stage('test cart') {
-//            agent {
-//             docker {
-//               image 'devopseasylearning/maven-revive:v1.0.0'
-//               args '-u root:root'
-//            }    
-//        }
-//        steps {
-//                sh '''
-//            cd REVIVE/src/cart
-//            mvn test -DskipTests=true
-//                '''
-//            }
-//        
-//    }
-//        stage('test orders') {
-//            agent {
-//             docker {
-//               image 'devopseasylearning/maven-revive:v1.0.0'
-//               args '-u root:root'
-//            }    
-//        }
-//        steps {
-//                sh '''
-//            cd REVIVE/src/orders
-//            mvn test -DskipTests=true
-//                '''
-//            }
-//        
-//    }
-//    stage('test checkout') {
-//            agent {
-//             docker {
-//               image 'devopseasylearning/nodejs01-revive:v1.0.0'
-//               args '-u root:root'
-//            }    
-//        }
-//        steps {
-//                sh '''
-//            cd REVIVE/src/checkout 
-//            npm install
-//                '''
-//            }
-//        
-//    }
-//    stage('SonarQube analysis') {
-//            agent {
-//                docker {
-//                  image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
-//                }
-//               }
-//               environment {
-//        CI = 'true'
-//        scannerHome='/opt/sonar-scanner'
-//    }
-//            steps{
-//                withSonarQubeEnv('sonar') {
-//                    sh "${scannerHome}/bin/sonar-scanner"
-//                }
-//            }
-//        }
-//    stage("Quality Gate") {
-//            steps {
-//              timeout(time: 1, unit: 'HOURS') {
-//                waitForQualityGate abortPipeline: true
-//              }
-//            }
-//          }
-        stage('Build ui') {
+        stage('test ui') {
+            agent {
+             docker {
+               image 'devopseasylearning/maven-revive:v1.0.0'
+               args '-u root:root'
+            }    
+        } 
+            steps {
+                sh '''
+            cd REVIVE/src/ui
+            mvn test -DskipTests=true
+                '''
+            }
+        
+        }
+        stage('test catalog') {
+            agent {
+             docker {
+               image 'devopseasylearning/golang02-revive:v1.0.0'
+               args '-u 0:0'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/catalog 
+            go test -buildscv=false
+                '''
+            }
+        
+    }
+        stage('test cart') {
+            agent {
+             docker {
+               image 'devopseasylearning/maven-revive:v1.0.0'
+               args '-u root:root'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/cart
+            mvn test -DskipTests=true
+                '''
+            }
+        
+    }
+        stage('test orders') {
+            agent {
+             docker {
+               image 'devopseasylearning/maven-revive:v1.0.0'
+               args '-u root:root'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/orders
+            mvn test -DskipTests=true
+                '''
+            }
+        
+    }
+    stage('test checkout') {
+            agent {
+             docker {
+               image 'devopseasylearning/nodejs01-revive:v1.0.0'
+               args '-u root:root'
+            }    
+        }
+        steps {
+                sh '''
+            cd REVIVE/src/checkout 
+            npm install
+                '''
+            }
+        
+    }
+    stage('SonarQube analysis') {
+            agent {
+                docker {
+                  image 'devopseasylearning/sonar-scanner-revive:v1.0.0'
+                }
+               }
+               environment {
+        CI = 'true'
+        scannerHome='/opt/sonar-scanner'
+    }
+            steps{
+                withSonarQubeEnv('sonar') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+    stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }      stage('Build ui') {
             steps {
                 sh '''
                 cd $WORKSPACE/REVIVE/src/ui
@@ -214,7 +213,7 @@ pipeline{
         stage('Push ui') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                sh '''
@@ -226,7 +225,7 @@ pipeline{
         stage('Push catalog') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                sh '''
@@ -238,7 +237,7 @@ pipeline{
         stage('Push cart') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                sh '''
@@ -250,7 +249,7 @@ pipeline{
         stage('Push orders') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                sh '''
@@ -263,7 +262,7 @@ pipeline{
         stage('Push checkout') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                sh '''
@@ -275,7 +274,7 @@ pipeline{
         stage('Push assets') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                 sh '''
@@ -288,7 +287,7 @@ pipeline{
         stage('Generate compose-file') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                 script {
@@ -487,7 +486,7 @@ EOF
         stage('deployment') {
            when{ 
          expression {
-           env.GIT_BRANCH == 'origin/phase8' }
+           env.GIT_BRANCH == 'origin/Phase-8' }
            }
            steps {
                sh '''
