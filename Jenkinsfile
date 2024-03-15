@@ -124,7 +124,8 @@ pipeline{
                 waitForQualityGate abortPipeline: true
               }
             }
-          }      stage('Build ui') {
+          }      
+     stage('Build ui') {
             steps {
                 sh '''
                 cd $WORKSPACE/REVIVE/src/ui
